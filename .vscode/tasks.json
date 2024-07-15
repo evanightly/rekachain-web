@@ -1,0 +1,188 @@
+/*
+RESERVED GROUPS:
+    - groupA
+    - groupB
+*/
+
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Switch:TestingMode",
+            "type": "shell",
+            "command": "(Get-Content .env) -replace 'APP_ENV=.*', 'APP_ENV=testing' | Set-Content .env"
+        },
+        {
+            "label": "Switch:DevelopmentMode",
+            "type": "shell",
+            "command": "(Get-Content .env) -replace 'APP_ENV=.*', 'APP_ENV=local' | Set-Content .env"
+        },
+
+        // ----------------------------------------------------------------
+
+        {
+            "label": "App:Laravel",
+            "type": "shell",
+            "command": "php artisan serve",
+            "presentation": {
+                "group": "groupA"
+            }
+        },
+        {
+            "label": "App:NPM",
+            "type": "shell",
+            "command": "npm run dev",
+            "presentation": {
+                "group": "groupA"
+            }
+        },
+        {
+            "label": "App:Websocket",
+            "type": "shell",
+            "command": "php artisan reverb:start",
+            "presentation": {
+                "group": "groupA"
+            }
+        },
+
+        // Anticipate if using env.QUEUE_CONNECTION = database
+        {
+            "label": "App:ListenQueue",
+            "type": "shell",
+            "command": "php artisan queue:listen"
+        },
+
+        {
+            "label": "App:Serve",
+            "problemMatcher": [],
+            "dependsOn": ["App:Laravel", "App:NPM", "App:Websocket"]
+        },
+
+        // ----------------------------------------------------------------
+
+        {
+            "label": "Install:ComposerDependencies",
+            "type": "shell",
+            "command": "composer install",
+            "presentation": {
+                "group": "groupB"
+            }
+        },
+        {
+            "label": "Install:NPMDependencies",
+            "type": "shell",
+            "command": "npm install",
+            "presentation": {
+                "group": "groupB"
+            }
+        },
+        {
+            "label": "Storage:Link",
+            "type": "shell",
+            "command": "php artisan storage:link"
+        },
+        {
+            "label": "Install Dependencies",
+            "problemMatcher": [],
+            "dependsOn": [
+                "Install:ComposerDependencies",
+                "Install:NPMDependencies"
+            ]
+        },
+
+        // ----------------------------------------------------------------
+
+        {
+            "label": "Run:LaravelIDEHelper",
+            "problemMatcher": [],
+            "type": "shell",
+            "command": "composer ide-helper"
+        },
+
+        // ----------------------------------------------------------------
+
+        {
+            "label": "Set:DatabaseName",
+            "type": "shell",
+            "command": "(Get-Content .env) -replace 'DB_DATABASE=.*', 'DB_DATABASE=${input:dbName}' | Set-Content .env",
+            "problemMatcher": [],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared"
+            }
+        },
+
+        // ----------------------------------------------------------------
+
+        {
+            "label": "Database:Create",
+            "type": "shell",
+            "command": "php artisan db:create"
+        },
+        {
+            "label": "Database:Migrate",
+            "type": "shell",
+            "command": "php artisan migrate --seed"
+        },
+        {
+            "label": "Database:MigrateFresh",
+            "type": "shell",
+            "command": "php artisan migrate:fresh --seed"
+        },
+        {
+            "label": "Database:Setup",
+            "problemMatcher": [],
+            "dependsOrder": "sequence",
+            "dependsOn": ["Database:Create", "Database:Migrate"]
+        },
+
+        // ----------------------------------------------------------------
+
+        {
+            "label": "Run:LaravelPint",
+            "problemMatcher": [],
+            "type": "shell",
+            "command": "./vendor/bin/pint"
+        },
+
+        // ----------------------------------------------------------------
+
+        {
+            "label": "Test:CypressOpen",
+            "problemMatcher": [],
+            "type": "shell",
+            "command": "npm run cypress:open"
+        },
+        {
+            "label": "Test:CypressRun",
+            "problemMatcher": [],
+            "type": "shell",
+            "command": "npm run cypress:run"
+        },
+
+        // ----------------------------------------------------------------
+
+        {
+            "label": "Test",
+            "problemMatcher": [],
+            "dependsOn": ["Switch:TestingMode", "App:Serve"],
+            "dependsOrder": "sequence"
+        },
+        {
+            "label": "App",
+            "problemMatcher": [],
+            "dependsOn": ["Switch:DevelopmentMode", "App:Serve"],
+            "dependsOrder": "sequence"
+        }
+    ],
+    "inputs": [
+        {
+            "type": "promptString",
+            "id": "dbName",
+            "description": "Enter the new database name",
+            "default": "rekachain-web"
+        }
+    ]
+}
