@@ -96,7 +96,3 @@ Beberapa direktori utama dalam proyek ini:
     -   Ibnu Tsalis Assalam
     -   Muhammad Helmi Permana Agung
     -   Chamzal Noer Haiky
-
-## Lisensi
-
-Proyek ini dilisensikan di bawah lisensi [MIT](LICENSE).
