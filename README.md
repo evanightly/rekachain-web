@@ -26,8 +26,8 @@ RekaChain bertujuan untuk meningkatkan efisiensi dan efektivitas operasional SCM
 
 ## Persyaratan Sistem
 
--   PHP >= 8.3.3
--   Composer
+-   PHP >= 8.3
+-   Composer 16.3
 -   PostgreSQL
 -   Node.js dan npm
 
