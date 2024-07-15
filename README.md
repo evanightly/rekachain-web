@@ -89,12 +89,13 @@ Beberapa direktori utama dalam proyek ini:
 
 -   **Frontend**
     -   Galur Arasy Lumintang
-    -   I Dewa Made
-    -   M. Al Kindy
+    -   I Dewa Made Wira Wardhana Athallahsyah
+    -   Muhammad Al Kindy
 -   **Backend**
+
     -   Ibnu Tsalis Assalam
-    -   M. Helmi Permana Agung
-    -   Chamsalisal
+    -   Muhammad Helmi Permana Agung
+    -   Chamzal Noer Haiky
 
 ## Lisensi
 
